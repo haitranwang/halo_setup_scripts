@@ -114,7 +114,7 @@ async function main(contract_name) {
     // ***************************
     // SETUP INFORMATION FOR USERS
     // ***************************
-    let token_code_id = 743;
+    let token_code_id = 588;
     let token_name_list = [
         "Binance-Peg BUSD Token",
         "Coin98",

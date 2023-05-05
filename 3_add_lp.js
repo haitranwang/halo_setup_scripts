@@ -14,13 +14,10 @@ let deployerWallet, deployerClient, deployerAccount;
 
 // Halo Factory contract address
 let haloFactoryAddress = "aura1ayqkpcknd72nec39gn7884p6lddljzns0yle6zll47lw38xa3j5sdnfk3u";
-// Halo Router contract address
-let haloRouterAddress = "aura1m8y4h8vq8ygk3gn29xz07kee004f02pxgr3kk28hnj92aj3vjqpss3pwdc";
 
-// Wallet address
-const ADMIN = "aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n";
 // Assets info list
-// Example: chainConfig.cw20Tokens.C98
+// Example: chainConfig.cw20Tokens.C98 for CW20 tokens
+//          chainConfig.denom for native token
 let asset1AddressList = [
     chainConfig.denom,
     chainConfig.cw20Tokens.MSTR,
@@ -115,75 +112,6 @@ async function main(contract_name) {
     // ****************
     // EXECUTE CONTRACT
     // ****************
-    // store contract
-
-    // Create pair EAURA - BUSD
-
-    // // Query pair contract address
-    // const pairContractAddressQueryMsg = {
-    //     "pair": {
-    //         "asset_infos": [
-    //             {
-    //                 "native_token": {
-    //                     "denom": chainConfig.denom,
-    //                 }
-    //             },
-    //             {
-    //                 "token": {
-    //                     "contract_addr": chainConfig.cw20Tokens.BUSD,
-    //                 }
-    //             },
-    //         ]
-    //     }
-    // }
-
-    // // Query pair contract address
-    // let pairContractAddressQueryResponse = await query(deployerClient, haloFactoryAddress, pairContractAddressQueryMsg);
-    // // Print out the result
-    // console.log("pairContractAddressQueryResponse: ", pairContractAddressQueryResponse.contract_addr);
-
-    // // Increase allowance
-    // const increaseAllowanceExecuteMsg = {
-    //     "increase_allowance": {
-    //         "spender": pairContractAddressQueryResponse.contract_addr,
-    //         "amount": "1000000000000000000",
-    //     }
-    // }
-
-    // // execute contract
-    // let increaseAllowanceExecuteResponse = await execute(deployerClient, deployerAccount, chainConfig.cw20Tokens.BUSD, increaseAllowanceExecuteMsg, 1000000);
-
-    // // Print out the result
-    // console.log("increaseAllowanceExecuteResponse transactionHash: ", increaseAllowanceExecuteResponse.transactionHash);
-
-    // // Provide liquidity
-    // const provideLiquidityExecuteMsg = {
-    //     "provide_liquidity": {
-    //         "assets": [
-    //             {
-    //                 "info": {
-    //                     "native_token": {
-    //                         "denom": chainConfig.denom,
-    //                     }
-    //                 },
-    //                 "amount": "1000000",
-    //             },
-    //             {
-    //                 "info": {
-    //                     "token": {
-    //                         "contract_addr": chainConfig.cw20Tokens.BUSD,
-    //                     }
-    //                 },
-    //                 "amount": "1000000000000000000",
-    //             }
-    //         ],
-    //     }
-    // }
-
-    // // execute contract
-    // let provideLiquidityExecuteResponse = await execute(deployerClient, deployerAccount, pairContractAddressQueryResponse.contract_addr, provideLiquidityExecuteMsg, 1000000);
-    // // Print out the result
-    // console.log("provide liquidity transactionHash: ", provideLiquidityExecuteResponse.transactionHash);
 
     // Provide liquidity for the pair base on asset1AddressList and asset2AddressList
     for (let i = 0; i < asset1AddressList.length; i++) {

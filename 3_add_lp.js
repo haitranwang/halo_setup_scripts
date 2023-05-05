@@ -40,6 +40,9 @@ let asset2AddressName = [
     "BUSD",
 ];
 
+const PROVIDE_NATIVE_AMOUNT = "1000000";
+const PROVIDE_CW20_AMOUNT = "1000000000000000000";
+
 /// @dev Execute a message to the contract
 /// @param `userClient` - The client of the user who execute the message
 /// @param `userAccount` -  The account of the user who execute the message
@@ -143,7 +146,7 @@ async function main(contract_name) {
             const increaseAllowanceExecuteMsg = {
                 "increase_allowance": {
                 "spender": pairContractAddressQueryResponse.contract_addr,
-                "amount": "1000000000000000000",
+                "amount": PROVIDE_CW20_AMOUNT,
                 }
             }
 
@@ -156,7 +159,7 @@ async function main(contract_name) {
             const increaseAllowanceExecuteMsg2 = {
                 "increase_allowance": {
                 "spender": pairContractAddressQueryResponse.contract_addr,
-                "amount": "1000000000000000000",
+                "amount": PROVIDE_CW20_AMOUNT,
                 }
             }
 
@@ -174,7 +177,7 @@ async function main(contract_name) {
                                     "contract_addr": asset1AddressList[i],
                                 }
                             },
-                            "amount": "1000000000000000000",
+                            "amount": PROVIDE_CW20_AMOUNT,
                         },
                         {
                             "info": {
@@ -182,7 +185,7 @@ async function main(contract_name) {
                                     "contract_addr": asset2AddressList[i],
                                 }
                             },
-                            "amount": "1000000000000000000",
+                            "amount": PROVIDE_CW20_AMOUNT,
                         }
                     ],
                 }
@@ -219,7 +222,7 @@ async function main(contract_name) {
                 const increaseAllowanceExecuteMsg2 = {
                     "increase_allowance": {
                     "spender": pairContractAddressQueryResponse2.contract_addr,
-                    "amount": "1000000000000000000",
+                    "amount": PROVIDE_CW20_AMOUNT,
                     }
                 }
 
@@ -238,7 +241,7 @@ async function main(contract_name) {
                                     "denom": chainConfig.denom,
                                 }
                             },
-                            "amount": "100000",
+                            "amount": PROVIDE_NATIVE_AMOUNT,
                         },
                         {
                             "info": {
@@ -246,13 +249,13 @@ async function main(contract_name) {
                                     "contract_addr": asset2AddressList[i],
                                 }
                             },
-                            "amount": "1000000000000000000",
+                            "amount": PROVIDE_CW20_AMOUNT,
                         }
                     ],
                 }
             }
             // execute contract
-            let provideLiquidityExecuteResponse = await execute(deployerClient, deployerAccount, pairContractAddressQueryResponse2.contract_addr, provideLiquidityExecuteMsg, 100000);
+            let provideLiquidityExecuteResponse = await execute(deployerClient, deployerAccount, pairContractAddressQueryResponse2.contract_addr, provideLiquidityExecuteMsg, PROVIDE_NATIVE_AMOUNT);
             // Print out the result
             console.log("provide liquidity transactionHash: ", provideLiquidityExecuteResponse.transactionHash);
         } else if (asset1AddressName[i] != chainConfig.denom && asset2AddressName[i] == chainConfig.denom) {
@@ -283,7 +286,7 @@ async function main(contract_name) {
                 const increaseAllowanceExecuteMsg1 = {
                     "increase_allowance": {
                     "spender": pairContractAddressQueryResponse1.contract_addr,
-                    "amount": "1000000000000000000",
+                    "amount": PROVIDE_CW20_AMOUNT,
                     }
                 }
 
@@ -301,7 +304,7 @@ async function main(contract_name) {
                                     "contract_addr": asset1AddressList[i],
                                 }
                             },
-                            "amount": "1000000000000000000",
+                            "amount": PROVIDE_CW20_AMOUNT,
                         },
                         {
                             "info": {
@@ -309,13 +312,13 @@ async function main(contract_name) {
                                     "denom": chainConfig.denom,
                                 }
                             },
-                            "amount": "100000",
+                            "amount": PROVIDE_NATIVE_AMOUNT,
                         }
                     ],
                 }
             }
             // execute contract
-            let provideLiquidityExecuteResponse = await execute(deployerClient, deployerAccount, pairContractAddressQueryResponse1.contract_addr, provideLiquidityExecuteMsg, 100000);
+            let provideLiquidityExecuteResponse = await execute(deployerClient, deployerAccount, pairContractAddressQueryResponse1.contract_addr, provideLiquidityExecuteMsg, PROVIDE_NATIVE_AMOUNT);
             // Print out the result
             console.log("provide liquidity transactionHash: ", provideLiquidityExecuteResponse.transactionHash);
         }

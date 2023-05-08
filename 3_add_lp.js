@@ -1,10 +1,10 @@
-const chainConfig = require('./config/chain').defaultChain;
+const chainConfig = require("./config/chain").defaultChain;
 
-const fs = require('fs');
+const fs = require("fs");
 
-const { SigningCosmWasmClient } = require('@cosmjs/cosmwasm-stargate');
-const { DirectSecp256k1HdWallet, coin } = require('@cosmjs/proto-signing');
-const { calculateFee, GasPrice } = require('@cosmjs/stargate');
+const { SigningCosmWasmClient } = require("@cosmjs/cosmwasm-stargate");
+const { DirectSecp256k1HdWallet, coin } = require("@cosmjs/proto-signing");
+const { calculateFee, GasPrice } = require("@cosmjs/stargate");
 
 // gas price
 const gasPrice = GasPrice.fromString(`0.025${chainConfig.denom}`);
@@ -13,18 +13,22 @@ let testerWallet, testerClient, testerAccount;
 let deployerWallet, deployerClient, deployerAccount;
 
 // Halo Factory contract address
-let haloFactoryAddress = "aura1ayqkpcknd72nec39gn7884p6lddljzns0yle6zll47lw38xa3j5sdnfk3u";
+let haloFactoryAddress =
+    "aura1ayqkpcknd72nec39gn7884p6lddljzns0yle6zll47lw38xa3j5sdnfk3u";
 
 // Assets info list
-// Example: chainConfig.cw20Tokens.C98 for CW20 tokens
-//          chainConfig.denom for native token
+// Example: chainConfig.cw20Tokens.C98
 let asset1AddressList = [
     chainConfig.denom,
     chainConfig.cw20Tokens.MSTR,
+    chainConfig.cw20Tokens.WBNB,
+    chainConfig.cw20Tokens.USDT,
 ];
 // Example: chainConfig.cw20Tokens.BUSD
 let asset2AddressList = [
-    chainConfig.cw20Tokens.MSTR,
+    chainConfig.cw20Tokens.BUSD,
+    chainConfig.cw20Tokens.USDT,
+    chainConfig.cw20Tokens.BUSD,
     chainConfig.cw20Tokens.BUSD,
 ];
 // Assets info list
@@ -32,11 +36,14 @@ let asset2AddressList = [
 let asset1AddressName = [
     chainConfig.denom,
     "MSTR",
-
+    "WBNB",
+    "USDT",
 ];
 // Example: C98
 let asset2AddressName = [
-    "MSTR",
+    "BUSD",
+    "USDT",
+    "BUSD",
     "BUSD",
 ];
 
@@ -49,7 +56,14 @@ const PROVIDE_CW20_AMOUNT = "1000000000000000000";
 /// @param `contract` - The address of the contract
 /// @param `executeMsg` - The message that will be executed
 /// @return `executeResponse` - The response of the execute transaction
-async function execute(userClient, userAccount, contract, executeMsg, native_amount = 0, native_denom = chainConfig.denom) {
+async function execute(
+    userClient,
+    userAccount,
+    contract,
+    executeMsg,
+    native_amount = 0,
+    native_denom = chainConfig.denom
+) {
     console.log("Executing message to contract...");
 
     const memo = "execute a message";
@@ -64,7 +78,7 @@ async function execute(userClient, userAccount, contract, executeMsg, native_amo
             executeMsg,
             "auto",
             memo,
-            [coin(native_amount, native_denom)],
+            [coin(native_amount, native_denom)]
         );
     } else {
         executeResponse = await userClient.execute(
@@ -72,13 +86,17 @@ async function execute(userClient, userAccount, contract, executeMsg, native_amo
             contract,
             executeMsg,
             "auto",
-            memo,
+            memo
         );
     }
 
-
     console.log("  transactionHash: ", executeResponse.transactionHash);
-    console.log("  gasWanted / gasUsed: ", executeResponse.gasWanted, " / ", executeResponse.gasUsed);
+    console.log(
+        "  gasWanted / gasUsed: ",
+        executeResponse.gasWanted,
+        " / ",
+        executeResponse.gasUsed
+    );
 
     return executeResponse;
 }
@@ -91,7 +109,10 @@ async function execute(userClient, userAccount, contract, executeMsg, native_amo
 async function query(userClient, contract, queryMsg) {
     console.log("Querying contract...");
 
-    const queryResponse = await userClient.queryContractSmart(contract, queryMsg);
+    const queryResponse = await userClient.queryContractSmart(
+        contract,
+        queryMsg
+    );
 
     console.log("  Querying successful");
 
@@ -106,10 +127,14 @@ async function main(contract_name) {
     deployerWallet = await DirectSecp256k1HdWallet.fromMnemonic(
         chainConfig.deployer_mnemonic,
         {
-            prefix: chainConfig.prefix
+            prefix: chainConfig.prefix,
         }
     );
-    deployerClient = await SigningCosmWasmClient.connectWithSigner(chainConfig.rpcEndpoint, deployerWallet, {gasPrice});
+    deployerClient = await SigningCosmWasmClient.connectWithSigner(
+        chainConfig.rpcEndpoint,
+        deployerWallet,
+        { gasPrice }
+    );
     deployerAccount = (await deployerWallet.getAccounts())[0];
 
     // ****************
@@ -118,209 +143,302 @@ async function main(contract_name) {
 
     // Provide liquidity for the pair base on asset1AddressList and asset2AddressList
     for (let i = 0; i < asset1AddressList.length; i++) {
-        if (asset1AddressName[i] != chainConfig.denom && asset2AddressName[i] != chainConfig.denom) {
+        if (
+            asset1AddressName[i] != chainConfig.denom &&
+            asset2AddressName[i] != chainConfig.denom
+        ) {
             // Query pair contract address
             const pairContractAddressQueryMsg = {
-            "pair": {
-                "asset_infos": [
+                pair: {
+                    asset_infos: [
                         {
-                            "token": {
-                                "contract_addr": asset1AddressList[i],
-                            }
+                            token: {
+                                contract_addr: asset1AddressList[i],
+                            },
                         },
                         {
-                            "token": {
-                                "contract_addr": asset2AddressList[i],
-                            }
+                            token: {
+                                contract_addr: asset2AddressList[i],
+                            },
                         },
-                    ]
-                }
-            }
+                    ],
+                },
+            };
 
             // Query pair contract address
-            let pairContractAddressQueryResponse = await query(deployerClient, haloFactoryAddress, pairContractAddressQueryMsg);
+            let pairContractAddressQueryResponse = await query(
+                deployerClient,
+                haloFactoryAddress,
+                pairContractAddressQueryMsg
+            );
             // Print out the result
-            console.log("pairContractAddressQueryResponse1: ", pairContractAddressQueryResponse.contract_addr);
+            console.log(
+                "pairContractAddressQueryResponse1: ",
+                pairContractAddressQueryResponse.contract_addr
+            );
 
             // Increase allowance
             const increaseAllowanceExecuteMsg = {
-                "increase_allowance": {
-                "spender": pairContractAddressQueryResponse.contract_addr,
-                "amount": PROVIDE_CW20_AMOUNT,
-                }
-            }
+                increase_allowance: {
+                    spender: pairContractAddressQueryResponse.contract_addr,
+                    amount: PROVIDE_CW20_AMOUNT,
+                },
+            };
 
             // execute contract
-            let increaseAllowanceExecuteResponse1 = await execute(deployerClient, deployerAccount, asset1AddressList[i], increaseAllowanceExecuteMsg, 10);
+            let increaseAllowanceExecuteResponse1 = await execute(
+                deployerClient,
+                deployerAccount,
+                asset1AddressList[i],
+                increaseAllowanceExecuteMsg,
+                10
+            );
             // Print out the result
-            console.log("increaseAllowanceExecuteResponse transactionHash: ", increaseAllowanceExecuteResponse1.transactionHash);
+            console.log(
+                "increaseAllowanceExecuteResponse transactionHash: ",
+                increaseAllowanceExecuteResponse1.transactionHash
+            );
 
             // Increase allowance
             const increaseAllowanceExecuteMsg2 = {
-                "increase_allowance": {
-                "spender": pairContractAddressQueryResponse.contract_addr,
-                "amount": PROVIDE_CW20_AMOUNT,
-                }
-            }
+                increase_allowance: {
+                    spender: pairContractAddressQueryResponse.contract_addr,
+                    amount: PROVIDE_CW20_AMOUNT,
+                },
+            };
 
             // execute contract
-            let increaseAllowanceExecuteResponse2 = await execute(deployerClient, deployerAccount, asset2AddressList[i], increaseAllowanceExecuteMsg2, 10);
+            let increaseAllowanceExecuteResponse2 = await execute(
+                deployerClient,
+                deployerAccount,
+                asset2AddressList[i],
+                increaseAllowanceExecuteMsg2,
+                10
+            );
             // Print out the result
-            console.log("increaseAllowanceExecuteResponse transactionHash: ", increaseAllowanceExecuteResponse2.transactionHash);
+            console.log(
+                "increaseAllowanceExecuteResponse transactionHash: ",
+                increaseAllowanceExecuteResponse2.transactionHash
+            );
             // Provide liquidity
             const provideLiquidityExecuteMsg = {
-                "provide_liquidity": {
-                    "assets": [
+                provide_liquidity: {
+                    assets: [
                         {
-                            "info": {
-                                "token": {
-                                    "contract_addr": asset1AddressList[i],
-                                }
+                            info: {
+                                token: {
+                                    contract_addr: asset1AddressList[i],
+                                },
                             },
-                            "amount": PROVIDE_CW20_AMOUNT,
+                            amount: PROVIDE_CW20_AMOUNT,
                         },
                         {
-                            "info": {
-                                "token": {
-                                    "contract_addr": asset2AddressList[i],
-                                }
+                            info: {
+                                token: {
+                                    contract_addr: asset2AddressList[i],
+                                },
                             },
-                            "amount": PROVIDE_CW20_AMOUNT,
-                        }
+                            amount: PROVIDE_CW20_AMOUNT,
+                        },
                     ],
-                }
-            }
+                },
+            };
             // execute contract
-            let provideLiquidityExecuteResponse = await execute(deployerClient, deployerAccount, pairContractAddressQueryResponse.contract_addr, provideLiquidityExecuteMsg, 10);
+            let provideLiquidityExecuteResponse = await execute(
+                deployerClient,
+                deployerAccount,
+                pairContractAddressQueryResponse.contract_addr,
+                provideLiquidityExecuteMsg,
+                10
+            );
             // Print out the result
-            console.log("provide liquidity transactionHash: ", provideLiquidityExecuteResponse.transactionHash);
-        } else if (asset1AddressName[i] == chainConfig.denom && asset2AddressName[i] != chainConfig.denom) {
+            console.log(
+                "provide liquidity transactionHash: ",
+                provideLiquidityExecuteResponse.transactionHash
+            );
+        } else if (
+            asset1AddressName[i] == chainConfig.denom &&
+            asset2AddressName[i] != chainConfig.denom
+        ) {
             // Query pair contract address
             const pairContractAddressQueryMsg2 = {
-                "pair": {
-                    "asset_infos": [
-                            {
-                                "native_token": {
-                                    "denom": chainConfig.denom,
-                                }
+                pair: {
+                    asset_infos: [
+                        {
+                            native_token: {
+                                denom: chainConfig.denom,
                             },
-                            {
-                                "token": {
-                                    "contract_addr": asset2AddressList[i],
-                                }
+                        },
+                        {
+                            token: {
+                                contract_addr: asset2AddressList[i],
                             },
-                        ]
-                    }
-                }
+                        },
+                    ],
+                },
+            };
 
-                // Query pair contract address
-                let pairContractAddressQueryResponse2 = await query(deployerClient, haloFactoryAddress, pairContractAddressQueryMsg2);
-                // Print out the result
-                console.log("pairContractAddressQueryResponse2: ", pairContractAddressQueryResponse2.contract_addr);
+            // Query pair contract address
+            let pairContractAddressQueryResponse2 = await query(
+                deployerClient,
+                haloFactoryAddress,
+                pairContractAddressQueryMsg2
+            );
+            // Print out the result
+            console.log(
+                "pairContractAddressQueryResponse2: ",
+                pairContractAddressQueryResponse2.contract_addr
+            );
 
-                // Increase allowance
-                const increaseAllowanceExecuteMsg2 = {
-                    "increase_allowance": {
-                    "spender": pairContractAddressQueryResponse2.contract_addr,
-                    "amount": PROVIDE_CW20_AMOUNT,
-                    }
-                }
+            // Increase allowance
+            const increaseAllowanceExecuteMsg2 = {
+                increase_allowance: {
+                    spender: pairContractAddressQueryResponse2.contract_addr,
+                    amount: PROVIDE_CW20_AMOUNT,
+                },
+            };
 
             // execute contract
-            let increaseAllowanceExecuteResponse2 = await execute(deployerClient, deployerAccount, asset2AddressList[i], increaseAllowanceExecuteMsg2, 10);
+            let increaseAllowanceExecuteResponse2 = await execute(
+                deployerClient,
+                deployerAccount,
+                asset2AddressList[i],
+                increaseAllowanceExecuteMsg2,
+                10
+            );
             // Print out the result
-            console.log("increaseAllowanceExecuteResponse transactionHash: ", increaseAllowanceExecuteResponse2.transactionHash);
+            console.log(
+                "increaseAllowanceExecuteResponse transactionHash: ",
+                increaseAllowanceExecuteResponse2.transactionHash
+            );
 
             // Provide liquidity
             const provideLiquidityExecuteMsg = {
-                "provide_liquidity": {
-                    "assets": [
+                provide_liquidity: {
+                    assets: [
                         {
-                            "info": {
-                                "native_token": {
-                                    "denom": chainConfig.denom,
-                                }
+                            info: {
+                                native_token: {
+                                    denom: chainConfig.denom,
+                                },
                             },
-                            "amount": PROVIDE_NATIVE_AMOUNT,
+                            amount: PROVIDE_NATIVE_AMOUNT,
                         },
                         {
-                            "info": {
-                                "token": {
-                                    "contract_addr": asset2AddressList[i],
-                                }
+                            info: {
+                                token: {
+                                    contract_addr: asset2AddressList[i],
+                                },
                             },
-                            "amount": PROVIDE_CW20_AMOUNT,
-                        }
+                            amount: PROVIDE_CW20_AMOUNT,
+                        },
                     ],
-                }
-            }
+                },
+            };
             // execute contract
-            let provideLiquidityExecuteResponse = await execute(deployerClient, deployerAccount, pairContractAddressQueryResponse2.contract_addr, provideLiquidityExecuteMsg, PROVIDE_NATIVE_AMOUNT);
+            let provideLiquidityExecuteResponse = await execute(
+                deployerClient,
+                deployerAccount,
+                pairContractAddressQueryResponse2.contract_addr,
+                provideLiquidityExecuteMsg,
+                PROVIDE_NATIVE_AMOUNT
+            );
             // Print out the result
-            console.log("provide liquidity transactionHash: ", provideLiquidityExecuteResponse.transactionHash);
-        } else if (asset1AddressName[i] != chainConfig.denom && asset2AddressName[i] == chainConfig.denom) {
+            console.log(
+                "provide liquidity transactionHash: ",
+                provideLiquidityExecuteResponse.transactionHash
+            );
+        } else if (
+            asset1AddressName[i] != chainConfig.denom &&
+            asset2AddressName[i] == chainConfig.denom
+        ) {
             // Query pair contract address
             const pairContractAddressQueryMsg1 = {
-                "pair": {
-                    "asset_infos": [
-                            {
-                                "native_token": {
-                                    "denom": chainConfig.denom,
-                                }
-                            },
-                            {
-                                "token": {
-                                    "contract_addr": asset1AddressList[i],
-                                }
-                            },
-                        ]
-                    }
-                }
-
-                // Query pair contract address
-                let pairContractAddressQueryResponse1 = await query(deployerClient, haloFactoryAddress, pairContractAddressQueryMsg1);
-                // Print out the result
-                console.log("pairContractAddressQueryResponse1: ", pairContractAddressQueryResponse1.contract_addr);
-
-                // Increase allowance
-                const increaseAllowanceExecuteMsg1 = {
-                    "increase_allowance": {
-                    "spender": pairContractAddressQueryResponse1.contract_addr,
-                    "amount": PROVIDE_CW20_AMOUNT,
-                    }
-                }
-
-                // execute contract
-                let increaseAllowanceExecuteResponse1 = await execute(deployerClient, deployerAccount, asset1AddressList[i], increaseAllowanceExecuteMsg1, 10);
-                // Print out the result
-                console.log("increaseAllowanceExecuteResponse transactionHash: ", increaseAllowanceExecuteResponse1.transactionHash);
-            // Provide liquidity
-            const provideLiquidityExecuteMsg = {
-                "provide_liquidity": {
-                    "assets": [
+                pair: {
+                    asset_infos: [
                         {
-                            "info": {
-                                "token": {
-                                    "contract_addr": asset1AddressList[i],
-                                }
+                            native_token: {
+                                denom: chainConfig.denom,
                             },
-                            "amount": PROVIDE_CW20_AMOUNT,
                         },
                         {
-                            "info": {
-                                "native_token": {
-                                    "denom": chainConfig.denom,
-                                }
+                            token: {
+                                contract_addr: asset1AddressList[i],
                             },
-                            "amount": PROVIDE_NATIVE_AMOUNT,
-                        }
+                        },
                     ],
-                }
-            }
-            // execute contract
-            let provideLiquidityExecuteResponse = await execute(deployerClient, deployerAccount, pairContractAddressQueryResponse1.contract_addr, provideLiquidityExecuteMsg, PROVIDE_NATIVE_AMOUNT);
+                },
+            };
+
+            // Query pair contract address
+            let pairContractAddressQueryResponse1 = await query(
+                deployerClient,
+                haloFactoryAddress,
+                pairContractAddressQueryMsg1
+            );
             // Print out the result
-            console.log("provide liquidity transactionHash: ", provideLiquidityExecuteResponse.transactionHash);
+            console.log(
+                "pairContractAddressQueryResponse1: ",
+                pairContractAddressQueryResponse1.contract_addr
+            );
+
+            // Increase allowance
+            const increaseAllowanceExecuteMsg1 = {
+                increase_allowance: {
+                    spender: pairContractAddressQueryResponse1.contract_addr,
+                    amount: PROVIDE_CW20_AMOUNT,
+                },
+            };
+
+            // execute contract
+            let increaseAllowanceExecuteResponse1 = await execute(
+                deployerClient,
+                deployerAccount,
+                asset1AddressList[i],
+                increaseAllowanceExecuteMsg1,
+                10
+            );
+            // Print out the result
+            console.log(
+                "increaseAllowanceExecuteResponse transactionHash: ",
+                increaseAllowanceExecuteResponse1.transactionHash
+            );
+            // Provide liquidity
+            const provideLiquidityExecuteMsg = {
+                provide_liquidity: {
+                    assets: [
+                        {
+                            info: {
+                                token: {
+                                    contract_addr: asset1AddressList[i],
+                                },
+                            },
+                            amount: PROVIDE_CW20_AMOUNT,
+                        },
+                        {
+                            info: {
+                                native_token: {
+                                    denom: chainConfig.denom,
+                                },
+                            },
+                            amount: PROVIDE_NATIVE_AMOUNT,
+                        },
+                    ],
+                },
+            };
+            // execute contract
+            let provideLiquidityExecuteResponse = await execute(
+                deployerClient,
+                deployerAccount,
+                pairContractAddressQueryResponse1.contract_addr,
+                provideLiquidityExecuteMsg,
+                PROVIDE_NATIVE_AMOUNT
+            );
+            // Print out the result
+            console.log(
+                "provide liquidity transactionHash: ",
+                provideLiquidityExecuteResponse.transactionHash
+            );
         }
     }
 }

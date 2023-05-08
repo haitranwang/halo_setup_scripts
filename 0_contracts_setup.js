@@ -1,10 +1,10 @@
-const chainConfig = require('./config/chain').defaultChain;
+const chainConfig = require("./config/chain").defaultChain;
 
-const fs = require('fs');
+const fs = require("fs");
 
-const { SigningCosmWasmClient } = require('@cosmjs/cosmwasm-stargate');
-const { DirectSecp256k1HdWallet, coin } = require('@cosmjs/proto-signing');
-const { calculateFee, GasPrice } = require('@cosmjs/stargate');
+const { SigningCosmWasmClient } = require("@cosmjs/cosmwasm-stargate");
+const { DirectSecp256k1HdWallet, coin } = require("@cosmjs/proto-signing");
+const { calculateFee, GasPrice } = require("@cosmjs/stargate");
 
 // wasm folder
 const wasmFolder = `${__dirname}/artifacts`;
@@ -15,7 +15,6 @@ const gasPrice = GasPrice.fromString(`0.025${chainConfig.denom}`);
 let testerWallet, testerClient, testerAccount;
 let deployerWallet, deployerClient, deployerAccount;
 
-
 /// @dev Store the contract source code on chain
 /// @param `wasm_name` - The name of the wasm file
 /// @return `storeCodeResponse` - The response of the store code transaction
@@ -24,11 +23,21 @@ async function store_contract(wasm_name) {
     const contractCode = fs.readFileSync(`${wasmFolder}/${wasm_name}.wasm`);
 
     console.log("Uploading contract code...");
-    const storeCodeResponse = await deployerClient.upload(deployerAccount.address, contractCode, uploadFee, 'Upload nft_launchapad contract code');
+    const storeCodeResponse = await deployerClient.upload(
+        deployerAccount.address,
+        contractCode,
+        uploadFee,
+        "Upload nft_launchapad contract code"
+    );
 
     console.log("  transactionHash: ", storeCodeResponse.transactionHash);
     console.log("  codeId: ", storeCodeResponse.codeId);
-    console.log("  gasWanted / gasUsed: ", storeCodeResponse.gasWanted, " / ", storeCodeResponse.gasUsed);
+    console.log(
+        "  gasWanted / gasUsed: ",
+        storeCodeResponse.gasWanted,
+        " / ",
+        storeCodeResponse.gasUsed
+    );
 
     return storeCodeResponse;
 }
@@ -46,11 +55,16 @@ async function instantiate(contract_code_id, instantiateMsg) {
         Number(contract_code_id),
         instantiateMsg,
         "instantiation contract",
-        "auto",
+        "auto"
     );
     console.log("  transactionHash: ", instantiateResponse.transactionHash);
     console.log("  contractAddress: ", instantiateResponse.contractAddress);
-    console.log("  gasWanted / gasUsed: ", instantiateResponse.gasWanted, " / ", instantiateResponse.gasUsed);
+    console.log(
+        "  gasWanted / gasUsed: ",
+        instantiateResponse.gasWanted,
+        " / ",
+        instantiateResponse.gasUsed
+    );
 
     return instantiateResponse;
 }
@@ -61,7 +75,14 @@ async function instantiate(contract_code_id, instantiateMsg) {
 /// @param `contract` - The address of the contract
 /// @param `executeMsg` - The message that will be executed
 /// @return `executeResponse` - The response of the execute transaction
-async function execute(userClient, userAccount, contract, executeMsg, native_amount = 0, native_denom = chainConfig.denom) {
+async function execute(
+    userClient,
+    userAccount,
+    contract,
+    executeMsg,
+    native_amount = 0,
+    native_denom = chainConfig.denom
+) {
     console.log("Executing message to contract...");
 
     const memo = "execute a message";
@@ -76,7 +97,7 @@ async function execute(userClient, userAccount, contract, executeMsg, native_amo
             executeMsg,
             "auto",
             memo,
-            [coin(native_amount, native_denom)],
+            [coin(native_amount, native_denom)]
         );
     } else {
         executeResponse = await userClient.execute(
@@ -84,13 +105,17 @@ async function execute(userClient, userAccount, contract, executeMsg, native_amo
             contract,
             executeMsg,
             "auto",
-            memo,
+            memo
         );
     }
 
-
     console.log("  transactionHash: ", executeResponse.transactionHash);
-    console.log("  gasWanted / gasUsed: ", executeResponse.gasWanted, " / ", executeResponse.gasUsed);
+    console.log(
+        "  gasWanted / gasUsed: ",
+        executeResponse.gasWanted,
+        " / ",
+        executeResponse.gasUsed
+    );
 
     return executeResponse;
 }
@@ -103,7 +128,10 @@ async function execute(userClient, userAccount, contract, executeMsg, native_amo
 async function query(userClient, contract, queryMsg) {
     console.log("Querying contract...");
 
-    const queryResponse = await userClient.queryContractSmart(contract, queryMsg);
+    const queryResponse = await userClient.queryContractSmart(
+        contract,
+        queryMsg
+    );
 
     console.log("  Querying successful");
 
@@ -118,10 +146,14 @@ async function main(contract_name) {
     deployerWallet = await DirectSecp256k1HdWallet.fromMnemonic(
         chainConfig.deployer_mnemonic,
         {
-            prefix: chainConfig.prefix
+            prefix: chainConfig.prefix,
         }
     );
-    deployerClient = await SigningCosmWasmClient.connectWithSigner(chainConfig.rpcEndpoint, deployerWallet, {gasPrice});
+    deployerClient = await SigningCosmWasmClient.connectWithSigner(
+        chainConfig.rpcEndpoint,
+        deployerWallet,
+        { gasPrice }
+    );
     deployerAccount = (await deployerWallet.getAccounts())[0];
 
     // ****************
@@ -135,25 +167,25 @@ async function main(contract_name) {
         "halo_pair",
         "halo_router",
         "cw20_base",
-    ]
+    ];
 
     let factory_code_id, pair_code_id, router_code_id, token_code_id;
 
-    for(let i = 0; i < contract_names.length; i++) {
+    for (let i = 0; i < contract_names.length; i++) {
         if (contract_names[i] == "halo_factory") {
             console.log("Storing halo_factory contract code...");
             let storeCodeResponse = await store_contract(contract_names[i]);
             factory_code_id = storeCodeResponse.codeId;
         } else if (contract_names[i] == "halo_pair") {
-            console.log("Storing halo_pair contract code...")
+            console.log("Storing halo_pair contract code...");
             let storeCodeResponse = await store_contract(contract_names[i]);
             pair_code_id = storeCodeResponse.codeId;
         } else if (contract_names[i] == "halo_router") {
-            console.log("Storing halo_router contract code...")
+            console.log("Storing halo_router contract code...");
             let storeCodeResponse = await store_contract(contract_names[i]);
             router_code_id = storeCodeResponse.codeId;
         } else if (contract_names[i] == "cw20_base") {
-            console.log("Storing cw20_base contract code...")
+            console.log("Storing cw20_base contract code...");
             let storeCodeResponse = await store_contract(contract_names[i]);
             token_code_id = storeCodeResponse.codeId;
         }
@@ -163,54 +195,72 @@ async function main(contract_name) {
     console.log("Instantiating halo_factory contract...");
     // prepare instantiate message
     const haloFactoryInstantiateMsg = {
-        "pair_code_id": pair_code_id,
-        "token_code_id": token_code_id,
-    }
+        pair_code_id: pair_code_id,
+        token_code_id: token_code_id,
+    };
     // instantiate contract
-    let haloFactoryInstantiateResponse = await instantiate(factory_code_id, haloFactoryInstantiateMsg);
+    let haloFactoryInstantiateResponse = await instantiate(
+        factory_code_id,
+        haloFactoryInstantiateMsg
+    );
 
     // instantiate contract halo_router
     console.log("Instantiating halo_router contract...");
     // prepare instantiate message
     const haloRouterInstantiateMsg = {
-        "halo_factory": haloFactoryInstantiateResponse.contractAddress,
-    }
+        halo_factory: haloFactoryInstantiateResponse.contractAddress,
+    };
     // instantiate contract
-    let haloRouterInstantiateResponse = await instantiate(router_code_id, haloRouterInstantiateMsg);
+    let haloRouterInstantiateResponse = await instantiate(
+        router_code_id,
+        haloRouterInstantiateMsg
+    );
 
     // instantiate contract halo_token
     console.log("Instantiating halo_token contract...");
     // prepare instantiate message
     const haloTokenInstantiateMsg = {
-        "name": "Halo Token",
-        "symbol": "HALO",
-        "decimals": 6,
-        "initial_balances": [
+        name: "Halo Token",
+        symbol: "HALO",
+        decimals: 6,
+        initial_balances: [
             {
-                "address": "aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n",
-                "amount": "1000000000000000"
-            }
+                address: "aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n",
+                amount: "1000000000000000",
+            },
         ],
-        "mint": {
-            "minter": "aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n",
-            "cap": "20000000000000000"
+        mint: {
+            minter: "aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n",
+            cap: "20000000000000000",
         },
-    }
+    };
     // instantiate contract
-    let haloTokenInstantiateResponse = await instantiate(token_code_id, haloTokenInstantiateMsg);
+    let haloTokenInstantiateResponse = await instantiate(
+        token_code_id,
+        haloTokenInstantiateMsg
+    );
 
     // Print out the result
     console.log("Contract deployment information:");
     console.log("Router contract code id: ", router_code_id);
-    console.log("Router contract address: ", haloRouterInstantiateResponse.contractAddress);
+    console.log(
+        "Router contract address: ",
+        haloRouterInstantiateResponse.contractAddress
+    );
     console.log("Factory contract code id: ", factory_code_id);
-    console.log("Factory contract address: ", haloFactoryInstantiateResponse.contractAddress);
+    console.log(
+        "Factory contract address: ",
+        haloFactoryInstantiateResponse.contractAddress
+    );
     console.log("Pair contract code id: ", pair_code_id);
     console.log("Token contract code id: ", token_code_id);
 
-    console.log("Token contract address: ", haloTokenInstantiateResponse.contractAddress);
+    console.log(
+        "Token contract address: ",
+        haloTokenInstantiateResponse.contractAddress
+    );
 
-    console.log("Halo setup completed!")
+    console.log("Halo setup completed!");
 }
 
 const myArgs = process.argv.slice(2);

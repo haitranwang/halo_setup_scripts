@@ -12,7 +12,10 @@ const local = {
         'C98': 'aura14ezx5er4hd2yr87etadq2zuyqyqqfy82t84wlj8cz2sl4mmnh04sj9rhfk',
         'MSTR': 'aura1vfy9ythluhumtltwra8yu4gwywp75j3mftzxjfh6l2yn3rnew3js6z26jg',
         'USDT': 'aura1gqt0p5vwn2jz99pvfxcp325sepkat85tetajth2xup3je0d90rjsjf33mp',
-        'WBNB': 'aura107r0h664jcv76lpjws9uy32vva0mncl6t5ss058zqlay384vrays3r9fk7'
+        'WBNB': 'aura107r0h664jcv76lpjws9uy32vva0mncl6t5ss058zqlay384vrays3r9fk7',
+    },
+    ibcTokens: {
+        'USDC': 'ibc/035BDC396AA81E38271D2FA5E4799AE159044B90BCF02CCA218EB364829C869E',
     },
 };
 
@@ -28,7 +31,10 @@ const localDocker = {
         'C98': 'aura14ezx5er4hd2yr87etadq2zuyqyqqfy82t84wlj8cz2sl4mmnh04sj9rhfk',
         'MSTR': 'aura1vfy9ythluhumtltwra8yu4gwywp75j3mftzxjfh6l2yn3rnew3js6z26jg',
         'USDT': 'aura1gqt0p5vwn2jz99pvfxcp325sepkat85tetajth2xup3je0d90rjsjf33mp',
-        'WBNB': 'aura107r0h664jcv76lpjws9uy32vva0mncl6t5ss058zqlay384vrays3r9fk7'
+        'WBNB': 'aura107r0h664jcv76lpjws9uy32vva0mncl6t5ss058zqlay384vrays3r9fk7',
+    },
+    ibcTokens: {
+        'USDC': 'ibc/035BDC396AA81E38271D2FA5E4799AE159044B90BCF02CCA218EB364829C869E',
     },
 };
 
@@ -44,7 +50,10 @@ const serenity = {
         'C98': 'aura14ezx5er4hd2yr87etadq2zuyqyqqfy82t84wlj8cz2sl4mmnh04sj9rhfk',
         'MSTR': 'aura1vfy9ythluhumtltwra8yu4gwywp75j3mftzxjfh6l2yn3rnew3js6z26jg',
         'USDT': 'aura1gqt0p5vwn2jz99pvfxcp325sepkat85tetajth2xup3je0d90rjsjf33mp',
-        'WBNB': 'aura107r0h664jcv76lpjws9uy32vva0mncl6t5ss058zqlay384vrays3r9fk7'
+        'WBNB': 'aura107r0h664jcv76lpjws9uy32vva0mncl6t5ss058zqlay384vrays3r9fk7',
+    },
+    ibcTokens: {
+        'USDC': 'ibc/035BDC396AA81E38271D2FA5E4799AE159044B90BCF02CCA218EB364829C869E',
     },
 };
 
@@ -60,7 +69,11 @@ const auraTestnet = {
         'C98': 'aura1u4edngajd5arhvek7wx689jghrj3yedgldxz48agldlxtspqvqssyddars',
         'MSTR': 'aura1er7f3u3l82sj05xq8pghj33evykvdlar085650mdd4ddxrgps5xq2k6c23',
         'USDT': 'aura1l692ynn938ymqsem04r8zk0274llk7r2wmlxdrud034rstjzyeaqada3wc',
-        'WBNB': 'aura1jhc3hg4m76nwzwj0n2g6trqdh4yq0v8e82vmt49wl6qg3nye08rswtwrla'
+        'WBNB': 'aura1jhc3hg4m76nwzwj0n2g6trqdh4yq0v8e82vmt49wl6qg3nye08rswtwrla',
+        'USDC': 'ibc/035BDC396AA81E38271D2FA5E4799AE159044B90BCF02CCA218EB364829C869E',
+    },
+    ibcTokens: {
+        'USDC': 'ibc/035BDC396AA81E38271D2FA5E4799AE159044B90BCF02CCA218EB364829C869E',
     },
 };
 
@@ -76,7 +89,10 @@ const euphoria = {
         'C98': 'aura14ezx5er4hd2yr87etadq2zuyqyqqfy82t84wlj8cz2sl4mmnh04sj9rhfk',
         'MSTR': 'aura1vfy9ythluhumtltwra8yu4gwywp75j3mftzxjfh6l2yn3rnew3js6z26jg',
         'USDT': 'aura1gqt0p5vwn2jz99pvfxcp325sepkat85tetajth2xup3je0d90rjsjf33mp',
-        'WBNB': 'aura107r0h664jcv76lpjws9uy32vva0mncl6t5ss058zqlay384vrays3r9fk7'
+        'WBNB': 'aura107r0h664jcv76lpjws9uy32vva0mncl6t5ss058zqlay384vrays3r9fk7',
+    },
+    ibcTokens: {
+        'USDC': 'ibc/035BDC396AA81E38271D2FA5E4799AE159044B90BCF02CCA218EB364829C869E',
     },
 };
 
@@ -92,11 +108,14 @@ const mainnet = {
         'C98': 'aura14ezx5er4hd2yr87etadq2zuyqyqqfy82t84wlj8cz2sl4mmnh04sj9rhfk',
         'MSTR': 'aura1vfy9ythluhumtltwra8yu4gwywp75j3mftzxjfh6l2yn3rnew3js6z26jg',
         'USDT': 'aura1gqt0p5vwn2jz99pvfxcp325sepkat85tetajth2xup3je0d90rjsjf33mp',
-        'WBNB': 'aura107r0h664jcv76lpjws9uy32vva0mncl6t5ss058zqlay384vrays3r9fk7'
+        'WBNB': 'aura107r0h664jcv76lpjws9uy32vva0mncl6t5ss058zqlay384vrays3r9fk7',
+    },
+    ibcTokens: {
+        'USDC': 'ibc/035BDC396AA81E38271D2FA5E4799AE159044B90BCF02CCA218EB364829C869E',
     },
 };
 
-let defaultChain = auraTestnet;
+let defaultChain = euphoria;
 
 
 defaultChain.deployer_mnemonic = process.env.MNEMONIC

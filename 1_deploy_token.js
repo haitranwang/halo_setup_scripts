@@ -1,10 +1,10 @@
-const chainConfig = require('./config/chain').defaultChain;
+const chainConfig = require("./config/chain").defaultChain;
 
-const fs = require('fs');
+const fs = require("fs");
 
-const { SigningCosmWasmClient } = require('@cosmjs/cosmwasm-stargate');
-const { DirectSecp256k1HdWallet, coin } = require('@cosmjs/proto-signing');
-const { calculateFee, GasPrice } = require('@cosmjs/stargate');
+const { SigningCosmWasmClient } = require("@cosmjs/cosmwasm-stargate");
+const { DirectSecp256k1HdWallet, coin } = require("@cosmjs/proto-signing");
+const { calculateFee, GasPrice } = require("@cosmjs/stargate");
 
 // wasm folder
 const wasmFolder = `${__dirname}/artifacts`;
@@ -15,7 +15,6 @@ const gasPrice = GasPrice.fromString(`0.025${chainConfig.denom}`);
 let testerWallet, testerClient, testerAccount;
 let deployerWallet, deployerClient, deployerAccount;
 
-
 /// @dev Store the contract source code on chain
 /// @param `wasm_name` - The name of the wasm file
 /// @return `storeCodeResponse` - The response of the store code transaction
@@ -24,11 +23,21 @@ async function store_contract(wasm_name) {
     const contractCode = fs.readFileSync(`${wasmFolder}/${wasm_name}.wasm`);
 
     console.log("Uploading contract code...");
-    const storeCodeResponse = await deployerClient.upload(deployerAccount.address, contractCode, uploadFee, 'Upload nft_launchapad contract code');
+    const storeCodeResponse = await deployerClient.upload(
+        deployerAccount.address,
+        contractCode,
+        uploadFee,
+        "Upload nft_launchapad contract code"
+    );
 
     console.log("  transactionHash: ", storeCodeResponse.transactionHash);
     console.log("  codeId: ", storeCodeResponse.codeId);
-    console.log("  gasWanted / gasUsed: ", storeCodeResponse.gasWanted, " / ", storeCodeResponse.gasUsed);
+    console.log(
+        "  gasWanted / gasUsed: ",
+        storeCodeResponse.gasWanted,
+        " / ",
+        storeCodeResponse.gasUsed
+    );
 
     return storeCodeResponse;
 }
@@ -46,11 +55,16 @@ async function instantiate(contract_code_id, instantiateMsg) {
         Number(contract_code_id),
         instantiateMsg,
         "instantiation contract",
-        "auto",
+        "auto"
     );
     console.log("  transactionHash: ", instantiateResponse.transactionHash);
     console.log("  contractAddress: ", instantiateResponse.contractAddress);
-    console.log("  gasWanted / gasUsed: ", instantiateResponse.gasWanted, " / ", instantiateResponse.gasUsed);
+    console.log(
+        "  gasWanted / gasUsed: ",
+        instantiateResponse.gasWanted,
+        " / ",
+        instantiateResponse.gasUsed
+    );
 
     return instantiateResponse;
 }
@@ -61,7 +75,14 @@ async function instantiate(contract_code_id, instantiateMsg) {
 /// @param `contract` - The address of the contract
 /// @param `executeMsg` - The message that will be executed
 /// @return `executeResponse` - The response of the execute transaction
-async function execute(userClient, userAccount, contract, executeMsg, native_amount = 0, native_denom = chainConfig.denom) {
+async function execute(
+    userClient,
+    userAccount,
+    contract,
+    executeMsg,
+    native_amount = 0,
+    native_denom = chainConfig.denom
+) {
     console.log("Executing message to contract...");
 
     const memo = "execute a message";
@@ -76,7 +97,7 @@ async function execute(userClient, userAccount, contract, executeMsg, native_amo
             executeMsg,
             "auto",
             memo,
-            [coin(native_amount, native_denom)],
+            [coin(native_amount, native_denom)]
         );
     } else {
         executeResponse = await userClient.execute(
@@ -84,13 +105,17 @@ async function execute(userClient, userAccount, contract, executeMsg, native_amo
             contract,
             executeMsg,
             "auto",
-            memo,
+            memo
         );
     }
 
-
     console.log("  transactionHash: ", executeResponse.transactionHash);
-    console.log("  gasWanted / gasUsed: ", executeResponse.gasWanted, " / ", executeResponse.gasUsed);
+    console.log(
+        "  gasWanted / gasUsed: ",
+        executeResponse.gasWanted,
+        " / ",
+        executeResponse.gasUsed
+    );
 
     return executeResponse;
 }
@@ -103,7 +128,10 @@ async function execute(userClient, userAccount, contract, executeMsg, native_amo
 async function query(userClient, contract, queryMsg) {
     console.log("Querying contract...");
 
-    const queryResponse = await userClient.queryContractSmart(contract, queryMsg);
+    const queryResponse = await userClient.queryContractSmart(
+        contract,
+        queryMsg
+    );
 
     console.log("  Querying successful");
 
@@ -122,59 +150,58 @@ async function main(contract_name) {
         "Binance-Peg BSC-USD",
         "Wrapped BNB",
     ];
-    let token_name_symbol_list = [
-        "BUSD",
-        "C98",
-        "MSTR",
-        "USDT",
-        "WBNB",
-    ];
-    let token_decimal_list = [
-        18,
-        18,
-        18,
-        18,
-        18,
-    ];
+    let token_name_symbol_list = ["BUSD", "C98", "MSTR", "USDT", "WBNB"];
+    let token_decimal_list = [18, 18, 18, 18, 18];
     let minter = "aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n";
-    let initial_balances_address = "aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n";
+    let initial_balances_address =
+        "aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n";
     let initial_balances_amount = "1000000000000000000000000000";
-    let cap = "20000000000000000000000000000"
+    let cap = "20000000000000000000000000000";
     // connect deployer wallet to chain and get admin account
     deployerWallet = await DirectSecp256k1HdWallet.fromMnemonic(
         chainConfig.deployer_mnemonic,
         {
-            prefix: chainConfig.prefix
+            prefix: chainConfig.prefix,
         }
     );
-    deployerClient = await SigningCosmWasmClient.connectWithSigner(chainConfig.rpcEndpoint, deployerWallet, {gasPrice});
+    deployerClient = await SigningCosmWasmClient.connectWithSigner(
+        chainConfig.rpcEndpoint,
+        deployerWallet,
+        { gasPrice }
+    );
     deployerAccount = (await deployerWallet.getAccounts())[0];
 
     // prepare instantiate message
     for (let i = 0; i < token_name_list.length; i++) {
         let token_instantiate_msg = {
-            "name": token_name_list[i],
-            "symbol": token_name_symbol_list[i],
-            "decimals": token_decimal_list[i],
-            "initial_balances": [
+            name: token_name_list[i],
+            symbol: token_name_symbol_list[i],
+            decimals: token_decimal_list[i],
+            initial_balances: [
                 {
-                    "address": initial_balances_address,
-                    "amount": initial_balances_amount
-                }
+                    address: initial_balances_address,
+                    amount: initial_balances_amount,
+                },
             ],
-            "mint": {
-                "minter": minter,
-                "cap": cap
+            mint: {
+                minter: minter,
+                cap: cap,
             },
-        }
+        };
         // instantiate contract
-        let token_instantiate_response = await instantiate(token_code_id, token_instantiate_msg);
+        let token_instantiate_response = await instantiate(
+            token_code_id,
+            token_instantiate_msg
+        );
         // Print out the result
         console.log("Contract deployment information:");
-        console.log(token_name_list[i] + " contract address: ", token_instantiate_response.contractAddress);
+        console.log(
+            token_name_list[i] + " contract address: ",
+            token_instantiate_response.contractAddress
+        );
     }
 
-    console.log("Halo setup completed!")
+    console.log("Halo setup completed!");
 }
 
 const myArgs = process.argv.slice(2);

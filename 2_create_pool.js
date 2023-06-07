@@ -1,4 +1,6 @@
 const chainConfig = require("./config/chain").defaultChain;
+// Halo Factory contract address
+const haloFactoryAddress = chainConfig.haloFactoryAddress;
 
 const fs = require("fs");
 
@@ -12,30 +14,64 @@ const gasPrice = GasPrice.fromString(`0.025${chainConfig.denom}`);
 let testerWallet, testerClient, testerAccount;
 let deployerWallet, deployerClient, deployerAccount;
 
-// Halo Factory contract address
-let haloFactoryAddress =
-    "aura19mz8mzsgswshjltvqghxzrs6lgqffxmxzz7nzmv7am07lr4625pswqy29j";
-
 // Wallet address
-const ADMIN = "aura1uh24g2lc8hvvkaaf7awz25lrh5fptthu2dhq0n";
+const ADMIN = "aura1uaflg8e46wwtvm0td8mkjeaa0d5s53c92dj85r";
 // Assets info list
 // Example: chainConfig.cw20Tokens.C98
 let asset1AddressList = [
-    chainConfig.denom,
-];
-// Example: chainConfig.cw20Tokens.BUSD
-let asset2AddressList = [
+    // chainConfig.cw20Tokens.SFTY,
     chainConfig.ibcTokens.USDC,
+];
+// Example: chainConfig.cw20Tokens.BUSD or chainConfig.ibcTokens.USDC,
+let asset2AddressList = [
+    // chainConfig.denom,
+    chainConfig.cw20Tokens.SFTY,
 ];
 // Assets info list
 // Example: C98
 let asset1AddressName = [
-    chainConfig.denom,
+    // "SFTY",
+    "USDC",
 ];
 // Example: C98
 let asset2AddressName = [
-    "USDC"
+    // chainConfig.denom,
+    "SFTY",
 ];
+
+// **************************************
+// // Assets info list
+// // Example: chainConfig.cw20Tokens.C98
+// let asset1AddressList = [
+//     chainConfig.denom,
+//     chainConfig.cw20Tokens.SFTY,
+//     chainConfig.cw20Tokens.WBNB,
+//     chainConfig.cw20Tokens.USDT,
+// ];
+// // Example: chainConfig.cw20Tokens.BUSD
+// let asset2AddressList = [
+//     chainConfig.cw20Tokens.BUSD,
+//     chainConfig.cw20Tokens.USDT,
+//     chainConfig.cw20Tokens.BUSD,
+//     chainConfig.cw20Tokens.BUSD,
+// ];
+// // Assets info list
+// // Example: C98
+// let asset1AddressName = [
+//     chainConfig.denom,
+//     "SFTY",
+//     "WBNB",
+//     "USDT",
+// ];
+// // Example: C98
+// let asset2AddressName = [
+//     "BUSD",
+//     "USDT",
+//     "BUSD",
+//     "BUSD",
+// ];
+// **************************************
+
 
 /// @dev Execute a message to the contract
 /// @param `userClient` - The client of the user who execute the message
@@ -184,14 +220,18 @@ async function main(contract_name) {
         // Create pair
         if (
             asset1AddressName[i] != chainConfig.denom &&
-            asset1AddressName[i] != chainConfig.denom
+            asset2AddressName[i] != chainConfig.denom
         ) {
             const createPairExecuteMsg = {
                 create_pair: {
                     asset_infos: [
                         {
-                            token: {
-                                contract_addr: asset1AddressList[i],
+                            // token: {
+                            //     contract_addr: asset1AddressList[i],
+                            // },
+                            native_token: {
+                                // Remember to "Add ICB Native Token Decimals"
+                                denom: asset1AddressList[i],
                             },
                         },
                         {
@@ -250,8 +290,8 @@ async function main(contract_name) {
                             //     contract_addr: asset2AddressList[i],
                             // },
                             native_token: {
-                                // Remember to "Add ICB Native Token Decimals"
-                                denom: asset2AddressList[i],
+                            // Remember to "Add ICB Native Token Decimals"
+                            denom: asset2AddressList[i],
                             },
                         },
                     ],

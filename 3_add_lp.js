@@ -1,4 +1,6 @@
 const chainConfig = require("./config/chain").defaultChain;
+// Halo Factory contract address
+const haloFactoryAddress = chainConfig.haloFactoryAddress;
 
 const fs = require("fs");
 
@@ -11,10 +13,6 @@ const gasPrice = GasPrice.fromString(`0.025${chainConfig.denom}`);
 // tester and deployer info
 let testerWallet, testerClient, testerAccount;
 let deployerWallet, deployerClient, deployerAccount;
-
-// Halo Factory contract address
-let haloFactoryAddress =
-    "aura1ayqkpcknd72nec39gn7884p6lddljzns0yle6zll47lw38xa3j5sdnfk3u";
 
 // Assets info list
 // Example: chainConfig.cw20Tokens.C98

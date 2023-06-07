@@ -10,13 +10,16 @@ const local = {
     cw20Tokens: {
         'BUSD': 'aura1qwj4gcay2lldg59hy3x0sftenhrmxz5sj3yt62u7ds5erlz055zsvna7q7',
         'C98': 'aura14ezx5er4hd2yr87etadq2zuyqyqqfy82t84wlj8cz2sl4mmnh04sj9rhfk',
-        'MSTR': 'aura1vfy9ythluhumtltwra8yu4gwywp75j3mftzxjfh6l2yn3rnew3js6z26jg',
+        'SFTY': 'aura1jfv0her2us5gvh0ljylcudxzugkc8846ad02m9l7ge3qfvpgsqpsqzz5en',
         'USDT': 'aura1gqt0p5vwn2jz99pvfxcp325sepkat85tetajth2xup3je0d90rjsjf33mp',
         'WBNB': 'aura107r0h664jcv76lpjws9uy32vva0mncl6t5ss058zqlay384vrays3r9fk7',
     },
     ibcTokens: {
         'USDC': 'ibc/035BDC396AA81E38271D2FA5E4799AE159044B90BCF02CCA218EB364829C869E',
     },
+    haloFactoryAddress: 'aura14qhdeck9xapnf28suvlsxwphqvcw9j5s6y3sgfudhfjf6yx9mvmqtewl5z',
+    haloRouterAddress: 'aura1jenr0443hmefhlfxu9adyyc0tc205eww3paqhsnna8ys976dzz3qa97ukc',
+    haloPoolFactoryAddress: 'aura10klrhylfud7py92na7l29fwyn9ndv7adncpvwu6ldusztdh4uqvs570gwc',
 };
 
 const localDocker = {
@@ -29,13 +32,16 @@ const localDocker = {
     cw20Tokens: {
         'BUSD': 'aura1qwj4gcay2lldg59hy3x0sftenhrmxz5sj3yt62u7ds5erlz055zsvna7q7',
         'C98': 'aura14ezx5er4hd2yr87etadq2zuyqyqqfy82t84wlj8cz2sl4mmnh04sj9rhfk',
-        'MSTR': 'aura1vfy9ythluhumtltwra8yu4gwywp75j3mftzxjfh6l2yn3rnew3js6z26jg',
+        'SFTY': 'aura1jfv0her2us5gvh0ljylcudxzugkc8846ad02m9l7ge3qfvpgsqpsqzz5en',
         'USDT': 'aura1gqt0p5vwn2jz99pvfxcp325sepkat85tetajth2xup3je0d90rjsjf33mp',
         'WBNB': 'aura107r0h664jcv76lpjws9uy32vva0mncl6t5ss058zqlay384vrays3r9fk7',
     },
     ibcTokens: {
         'USDC': 'ibc/035BDC396AA81E38271D2FA5E4799AE159044B90BCF02CCA218EB364829C869E',
     },
+    haloFactoryAddress: 'aura14qhdeck9xapnf28suvlsxwphqvcw9j5s6y3sgfudhfjf6yx9mvmqtewl5z',
+    haloRouterAddress: 'aura1jenr0443hmefhlfxu9adyyc0tc205eww3paqhsnna8ys976dzz3qa97ukc',
+    haloPoolFactoryAddress: 'aura10klrhylfud7py92na7l29fwyn9ndv7adncpvwu6ldusztdh4uqvs570gwc',
 };
 
 const serenity = {
@@ -48,13 +54,16 @@ const serenity = {
     cw20Tokens: {
         'BUSD': 'aura1qwj4gcay2lldg59hy3x0sftenhrmxz5sj3yt62u7ds5erlz055zsvna7q7',
         'C98': 'aura14ezx5er4hd2yr87etadq2zuyqyqqfy82t84wlj8cz2sl4mmnh04sj9rhfk',
-        'MSTR': 'aura1vfy9ythluhumtltwra8yu4gwywp75j3mftzxjfh6l2yn3rnew3js6z26jg',
+        'SFTY': 'aura1jfv0her2us5gvh0ljylcudxzugkc8846ad02m9l7ge3qfvpgsqpsqzz5en',
         'USDT': 'aura1gqt0p5vwn2jz99pvfxcp325sepkat85tetajth2xup3je0d90rjsjf33mp',
         'WBNB': 'aura107r0h664jcv76lpjws9uy32vva0mncl6t5ss058zqlay384vrays3r9fk7',
     },
     ibcTokens: {
         'USDC': 'ibc/035BDC396AA81E38271D2FA5E4799AE159044B90BCF02CCA218EB364829C869E',
     },
+    haloFactoryAddress: 'aura14qhdeck9xapnf28suvlsxwphqvcw9j5s6y3sgfudhfjf6yx9mvmqtewl5z',
+    haloRouterAddress: 'aura1jenr0443hmefhlfxu9adyyc0tc205eww3paqhsnna8ys976dzz3qa97ukc',
+    haloPoolFactoryAddress: 'aura10klrhylfud7py92na7l29fwyn9ndv7adncpvwu6ldusztdh4uqvs570gwc',
 };
 
 const auraTestnet = {
@@ -67,7 +76,7 @@ const auraTestnet = {
     cw20Tokens: {
         'BUSD': 'aura1qsu5nr08nf23jaj0lsjztzxztvysukx46ncqkjnt89de9tn52puslxcz9m',
         'C98': 'aura1u4edngajd5arhvek7wx689jghrj3yedgldxz48agldlxtspqvqssyddars',
-        'MSTR': 'aura1er7f3u3l82sj05xq8pghj33evykvdlar085650mdd4ddxrgps5xq2k6c23',
+        'SFTY': 'aura1er7f3u3l82sj05xq8pghj33evykvdlar085650mdd4ddxrgps5xq2k6c23',
         'USDT': 'aura1l692ynn938ymqsem04r8zk0274llk7r2wmlxdrud034rstjzyeaqada3wc',
         'WBNB': 'aura1jhc3hg4m76nwzwj0n2g6trqdh4yq0v8e82vmt49wl6qg3nye08rswtwrla',
         'USDC': 'ibc/035BDC396AA81E38271D2FA5E4799AE159044B90BCF02CCA218EB364829C869E',
@@ -75,6 +84,9 @@ const auraTestnet = {
     ibcTokens: {
         'USDC': 'ibc/035BDC396AA81E38271D2FA5E4799AE159044B90BCF02CCA218EB364829C869E',
     },
+    haloFactoryAddress: 'aura14qhdeck9xapnf28suvlsxwphqvcw9j5s6y3sgfudhfjf6yx9mvmqtewl5z',
+    haloRouterAddress: 'aura1jenr0443hmefhlfxu9adyyc0tc205eww3paqhsnna8ys976dzz3qa97ukc',
+    haloPoolFactoryAddress: 'aura10klrhylfud7py92na7l29fwyn9ndv7adncpvwu6ldusztdh4uqvs570gwc',
 };
 
 const euphoria = {
@@ -87,13 +99,16 @@ const euphoria = {
     cw20Tokens: {
         'BUSD': 'aura1qwj4gcay2lldg59hy3x0sftenhrmxz5sj3yt62u7ds5erlz055zsvna7q7',
         'C98': 'aura14ezx5er4hd2yr87etadq2zuyqyqqfy82t84wlj8cz2sl4mmnh04sj9rhfk',
-        'MSTR': 'aura1vfy9ythluhumtltwra8yu4gwywp75j3mftzxjfh6l2yn3rnew3js6z26jg',
+        'SFTY': 'aura1svdtvvut8q9w60d9cvw8gzr22vae28z3dpupzj5hnzhwmf5qfhcq69mgz8',
         'USDT': 'aura1gqt0p5vwn2jz99pvfxcp325sepkat85tetajth2xup3je0d90rjsjf33mp',
         'WBNB': 'aura107r0h664jcv76lpjws9uy32vva0mncl6t5ss058zqlay384vrays3r9fk7',
     },
     ibcTokens: {
         'USDC': 'ibc/035BDC396AA81E38271D2FA5E4799AE159044B90BCF02CCA218EB364829C869E',
     },
+    haloFactoryAddress: 'aura14qhdeck9xapnf28suvlsxwphqvcw9j5s6y3sgfudhfjf6yx9mvmqtewl5z',
+    haloRouterAddress: 'aura1jenr0443hmefhlfxu9adyyc0tc205eww3paqhsnna8ys976dzz3qa97ukc',
+    haloPoolFactoryAddress: 'aura10klrhylfud7py92na7l29fwyn9ndv7adncpvwu6ldusztdh4uqvs570gwc',
 };
 
 const mainnet = {
@@ -106,16 +121,19 @@ const mainnet = {
     cw20Tokens: {
         'BUSD': 'aura1qwj4gcay2lldg59hy3x0sftenhrmxz5sj3yt62u7ds5erlz055zsvna7q7',
         'C98': 'aura14ezx5er4hd2yr87etadq2zuyqyqqfy82t84wlj8cz2sl4mmnh04sj9rhfk',
-        'MSTR': 'aura1vfy9ythluhumtltwra8yu4gwywp75j3mftzxjfh6l2yn3rnew3js6z26jg',
+        'SFTY': 'aura1jfv0her2us5gvh0ljylcudxzugkc8846ad02m9l7ge3qfvpgsqpsqzz5en',
         'USDT': 'aura1gqt0p5vwn2jz99pvfxcp325sepkat85tetajth2xup3je0d90rjsjf33mp',
         'WBNB': 'aura107r0h664jcv76lpjws9uy32vva0mncl6t5ss058zqlay384vrays3r9fk7',
     },
     ibcTokens: {
         'USDC': 'ibc/035BDC396AA81E38271D2FA5E4799AE159044B90BCF02CCA218EB364829C869E',
     },
+    haloFactoryAddress: 'aura14qhdeck9xapnf28suvlsxwphqvcw9j5s6y3sgfudhfjf6yx9mvmqtewl5z',
+    haloRouterAddress: 'aura1jenr0443hmefhlfxu9adyyc0tc205eww3paqhsnna8ys976dzz3qa97ukc',
+    haloPoolFactoryAddress: 'aura10klrhylfud7py92na7l29fwyn9ndv7adncpvwu6ldusztdh4uqvs570gwc',
 };
 
-let defaultChain = euphoria;
+let defaultChain = auraTestnet;
 
 
 defaultChain.deployer_mnemonic = process.env.MNEMONIC
